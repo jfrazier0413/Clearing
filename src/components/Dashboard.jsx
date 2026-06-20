@@ -1,6 +1,5 @@
-import { useState } from 'react'
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts'
-import { RefreshCw, TrendingUp, TrendingDown, Minus, ArrowRight } from 'lucide-react'
+import { RefreshCw, TrendingUp, TrendingDown, ArrowRight, CalendarDays } from 'lucide-react'
 import { useApp } from '../context/AppContext'
 import { formatCurrency, getCurrentYearMonth, formatMonthLabel } from '../utils/helpers'
 
@@ -48,11 +47,16 @@ const CustomTooltip = ({ active, payload }) => {
 
 export default function Dashboard({ onNavigate }) {
   const { year, month } = getCurrentYearMonth()
-  const { getMonthData, getDebtProgress, getCategoryBreakdown } = useApp()
+  const { getMonthData, getDebtProgress, getCategoryBreakdown, state } = useApp()
   const { income, expenses, net, transactions } = getMonthData(year, month)
   const debtProgress = getDebtProgress()
   const breakdown = getCategoryBreakdown(year, month)
   const recent = transactions.slice(0, 6)
+
+  // Split fixed vs variable expenses for the summary
+  const fixedExpenses = transactions.filter(t => t.isVirtual && t.type === 'expense')
+  const fixedTotal = fixedExpenses.reduce((s, t) => s + Number(t.amount), 0)
+  const variableTotal = expenses - fixedTotal
 
   return (
     <div>
@@ -79,6 +83,20 @@ export default function Dashboard({ onNavigate }) {
             <span className="amount amount-expense amount-lg">{formatCurrency(expenses)}</span>
             <TrendingDown size={14} color="var(--rose)" />
           </div>
+          {fixedTotal > 0 && (
+            <>
+              <div className="dash-stat">
+                <span className="dash-stat-label">Fixed</span>
+                <span className="amount amount-expense" style={{ fontSize: '1.1rem' }}>{formatCurrency(fixedTotal)}</span>
+                <CalendarDays size={14} color="var(--text-light)" />
+              </div>
+              <div className="dash-stat">
+                <span className="dash-stat-label">Variable</span>
+                <span className="amount amount-expense" style={{ fontSize: '1.1rem' }}>{formatCurrency(variableTotal)}</span>
+                <TrendingDown size={14} color="var(--rose-light)" />
+              </div>
+            </>
+          )}
           <div className="dash-stat" style={{ gridColumn: '1 / -1' }}>
             <span className="dash-stat-label">Net</span>
             <span className={`amount amount-lg ${net >= 0 ? 'amount-income' : 'amount-expense'}`}>
@@ -94,23 +112,11 @@ export default function Dashboard({ onNavigate }) {
           <p className="section-title">Spending by Category</p>
           <ResponsiveContainer width="100%" height={220}>
             <PieChart>
-              <Pie
-                data={breakdown}
-                cx="50%" cy="50%"
-                innerRadius={55} outerRadius={85}
-                paddingAngle={2}
-                dataKey="value"
-              >
-                {breakdown.map((entry, i) => (
-                  <Cell key={i} fill={entry.color ?? '#A89080'} />
-                ))}
+              <Pie data={breakdown} cx="50%" cy="50%" innerRadius={55} outerRadius={85} paddingAngle={2} dataKey="value">
+                {breakdown.map((entry, i) => <Cell key={i} fill={entry.color ?? '#A89080'} />)}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
-              <Legend
-                formatter={(v) => <span style={{ fontSize: '0.75rem', color: 'var(--text-medium)' }}>{v}</span>}
-                iconSize={8}
-                iconType="circle"
-              />
+              <Legend formatter={v => <span style={{ fontSize: '0.75rem', color: 'var(--text-medium)' }}>{v}</span>} iconSize={8} iconType="circle" />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -120,11 +126,7 @@ export default function Dashboard({ onNavigate }) {
       <div className="card" style={{ marginBottom: 12 }}>
         <div className="section-header card-pad" style={{ marginBottom: 0, paddingBottom: 0 }}>
           <p className="section-title" style={{ marginBottom: 0 }}>Recent Activity</p>
-          <button
-            className="btn btn-ghost btn-sm"
-            onClick={() => onNavigate('activity')}
-            style={{ display: 'flex', alignItems: 'center', gap: 4 }}
-          >
+          <button className="btn btn-ghost btn-sm" onClick={() => onNavigate('activity')} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             All <ArrowRight size={12} />
           </button>
         </div>
@@ -141,7 +143,7 @@ export default function Dashboard({ onNavigate }) {
               </div>
               <div className="txn-body">
                 <p className="txn-desc">{txn.description}</p>
-                <p className="txn-meta">{txn.category}</p>
+                <p className="txn-meta">{txn.category}{txn.isFixed ? ' · recurring' : ''}</p>
               </div>
               <span className={`amount ${txn.type === 'income' ? 'amount-income' : 'amount-expense'}`}>
                 {txn.type === 'income' ? '+' : '-'}{formatCurrency(txn.amount)}

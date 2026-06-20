@@ -77,9 +77,9 @@ function TransactionModal({ initial, onSave, onClose, categories, incomeCategori
           </select>
         </div>
 
-        <div className="form-actions">
+        <div className="form-actions" style={{ position: 'sticky', bottom: 0, background: 'var(--white)', paddingTop: 12, borderTop: '1px solid var(--border-light)' }}>
           <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
-          <button type="submit" className="btn btn-primary">{initial ? 'Save' : 'Add'}</button>
+          <button type="submit" className="btn btn-primary">{initial ? 'Save Changes' : 'Add Transaction'}</button>
         </div>
       </form>
     </Modal>

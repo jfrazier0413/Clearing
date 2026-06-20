@@ -45,9 +45,9 @@ function DebtModal({ initial, onSave, onClose }) {
           <label className="form-label">Min. Monthly Payment ($)</label>
           <input className="form-input" type="number" min="0" step="0.01" placeholder="0.00" value={form.minimumPayment} onChange={e => set('minimumPayment', e.target.value)} style={{ fontFamily: 'IBM Plex Mono, monospace' }} />
         </div>
-        <div className="form-actions">
+        <div className="form-actions" style={{ position: 'sticky', bottom: 0, background: 'var(--white)', paddingTop: 12, borderTop: '1px solid var(--border-light)' }}>
           <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
-          <button type="submit" className="btn btn-primary">{initial ? 'Save' : 'Add Debt'}</button>
+          <button type="submit" className="btn btn-primary">{initial ? 'Save Changes' : 'Add Debt'}</button>
         </div>
       </form>
     </Modal>
@@ -82,7 +82,7 @@ function PaymentModal({ debt, onSave, onClose }) {
         <p style={{ fontSize: '0.75rem', color: 'var(--text-light)' }}>
           This will create a "Debt Payments" expense transaction and reduce the balance.
         </p>
-        <div className="form-actions">
+        <div className="form-actions" style={{ position: 'sticky', bottom: 0, background: 'var(--white)', paddingTop: 12, borderTop: '1px solid var(--border-light)' }}>
           <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
           <button type="submit" className="btn btn-primary"><DollarSign size={14} /> Log Payment</button>
         </div>

@@ -43,9 +43,9 @@ function FixedModal({ initial, onSave, onClose, categories }) {
           <label className="form-label">Starting Month</label>
           <input className="form-input" type="month" value={form.startMonth} required onChange={e => set('startMonth', e.target.value)} />
         </div>
-        <div className="form-actions">
+        <div className="form-actions" style={{ position: 'sticky', bottom: 0, background: 'var(--white)', paddingTop: 12, borderTop: '1px solid var(--border-light)' }}>
           <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
-          <button type="submit" className="btn btn-primary">{initial ? 'Save' : 'Add'}</button>
+          <button type="submit" className="btn btn-primary">{initial ? 'Save Changes' : 'Add Fixed Expense'}</button>
         </div>
       </form>
     </Modal>
@@ -178,10 +178,40 @@ export default function FixedExpenses() {
           })}
         </div>
 
-        {activeThisMonth.length === 0 && (
+        {activeThisMonth.length === 0 ? (
           <p style={{ textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-light)', marginTop: 12 }}>
             No fixed expenses due this month
           </p>
+        ) : (
+          <div style={{ marginTop: 16, borderTop: '1px solid var(--border-light)', paddingTop: 12 }}>
+            <p style={{ fontSize: '0.72rem', color: 'var(--text-light)', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: 8 }}>
+              This month's schedule
+            </p>
+            {Object.entries(dayMap)
+              .sort(([a], [b]) => Number(a) - Number(b))
+              .map(([day, items]) => (
+                <div key={day} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 8 }}>
+                  <div style={{ width: 28, height: 28, borderRadius: 6, background: 'var(--cream-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '0.72rem', fontWeight: 600, color: 'var(--text-medium)' }}>
+                    {day}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    {items.map(fe => (
+                      <div key={fe.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+                        <span style={{ fontSize: '0.85rem', color: 'var(--text-dark)' }}>{fe.name}</span>
+                        <span className="amount amount-expense" style={{ fontSize: '0.85rem' }}>{formatCurrency(fe.amount)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))
+            }
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, paddingTop: 10, borderTop: '1px solid var(--border-light)' }}>
+              <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-medium)' }}>Monthly total</span>
+              <span className="amount amount-expense" style={{ fontSize: '1rem' }}>
+                {formatCurrency(activeThisMonth.reduce((s, fe) => s + Number(fe.amount), 0))}
+              </span>
+            </div>
+          </div>
         )}
       </div>
 
