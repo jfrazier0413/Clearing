@@ -66,15 +66,15 @@ function TransactionModal({ initial, onSave, onClose, categories, incomeCategori
         </div>
 
         <div className="form-group">
-          <label className="form-label">Description</label>
-          <input className="form-input" type="text" placeholder="What was this for?" value={form.description} required onChange={e => set('description', e.target.value)} />
-        </div>
-
-        <div className="form-group">
           <label className="form-label">Category</label>
           <select className="form-input" value={form.category} onChange={e => set('category', e.target.value)}>
             {cats.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Description</label>
+          <input className="form-input" type="text" placeholder="What was this for?" value={form.description} required onChange={e => set('description', e.target.value)} />
         </div>
 
       </form>

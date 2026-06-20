@@ -216,7 +216,12 @@ a { color: inherit; text-decoration: none; }
   width: 100%;
 }
 .form-input:focus { outline: none; border-color: var(--terracotta); }
-select.form-input { cursor: pointer; }
+select.form-input {
+  cursor: pointer;
+  -webkit-appearance: auto;
+  appearance: auto;
+  padding-right: 8px;
+}
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .form-grid { display: flex; flex-direction: column; gap: 14px; }
 .form-actions {
