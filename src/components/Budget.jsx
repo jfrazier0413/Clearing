@@ -13,8 +13,8 @@ function CategoryModal({ initial, onSave, onClose }) {
   function set(k, v) { setForm(f => ({ ...f, [k]: v })) }
 
   return (
-    <Modal title={initial ? 'Edit Category' : 'Add Budget Category'} onClose={onClose}>
-      <form onSubmit={e => { e.preventDefault(); onSave({ ...form, monthlyLimit: Number(form.monthlyLimit) }) }} className="form-grid">
+    <Modal title={initial ? 'Edit Category' : 'Add Budget Category'} onClose={onClose} formId="cat-form" saveLabel={initial ? 'Save' : 'Add'}>
+      <form id="cat-form" onSubmit={e => { e.preventDefault(); onSave({ ...form, monthlyLimit: Number(form.monthlyLimit) }) }} className="form-grid">
         <div className="form-group">
           <label className="form-label">Category Name</label>
           <input className="form-input" type="text" placeholder="e.g. Groceries" value={form.name} required onChange={e => set('name', e.target.value)} />
@@ -35,10 +35,6 @@ function CategoryModal({ initial, onSave, onClose }) {
               <button type="button" key={c} className={`color-swatch${form.color === c ? ' selected' : ''}`} style={{ background: c }} onClick={() => set('color', c)} />
             ))}
           </div>
-        </div>
-        <div className="form-actions" style={{ position: 'sticky', bottom: 0, background: 'var(--white)', paddingTop: 12, marginTop: 4, borderTop: '1px solid var(--border-light)' }}>
-          <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
-          <button type="submit" className="btn btn-primary">{initial ? 'Save Changes' : 'Add Category'}</button>
         </div>
       </form>
     </Modal>

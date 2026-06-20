@@ -30,8 +30,8 @@ function TransactionModal({ initial, onSave, onClose, categories, incomeCategori
   }
 
   return (
-    <Modal title={initial ? 'Edit Transaction' : 'Add Transaction'} onClose={onClose}>
-      <form onSubmit={handleSubmit} className="form-grid">
+    <Modal title={initial ? 'Edit Transaction' : 'Add Transaction'} onClose={onClose} formId="txn-form" saveLabel={initial ? 'Save' : 'Add'}>
+      <form id="txn-form" onSubmit={handleSubmit} className="form-grid">
         <div style={{ display: 'flex', gap: 8 }}>
           {['income', 'expense'].map(t => (
             <button
@@ -77,10 +77,6 @@ function TransactionModal({ initial, onSave, onClose, categories, incomeCategori
           </select>
         </div>
 
-        <div className="form-actions" style={{ position: 'sticky', bottom: 0, background: 'var(--white)', paddingTop: 12, borderTop: '1px solid var(--border-light)' }}>
-          <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
-          <button type="submit" className="btn btn-primary">{initial ? 'Save Changes' : 'Add Transaction'}</button>
-        </div>
       </form>
     </Modal>
   )

@@ -23,8 +23,8 @@ function DebtModal({ initial, onSave, onClose }) {
     })
   }
   return (
-    <Modal title={initial ? 'Edit Debt' : 'Add Debt'} onClose={onClose}>
-      <form onSubmit={handleSubmit} className="form-grid">
+    <Modal title={initial ? 'Edit Debt' : 'Add Debt'} onClose={onClose} formId="debt-form" saveLabel={initial ? 'Save' : 'Add'}>
+      <form id="debt-form" onSubmit={handleSubmit} className="form-grid">
         <div className="form-group">
           <label className="form-label">Debt Name</label>
           <input className="form-input" type="text" placeholder="e.g. Student Loan" value={form.name} required onChange={e => set('name', e.target.value)} />
@@ -45,10 +45,6 @@ function DebtModal({ initial, onSave, onClose }) {
           <label className="form-label">Min. Monthly Payment ($)</label>
           <input className="form-input" type="number" min="0" step="0.01" placeholder="0.00" value={form.minimumPayment} onChange={e => set('minimumPayment', e.target.value)} style={{ fontFamily: 'IBM Plex Mono, monospace' }} />
         </div>
-        <div className="form-actions" style={{ position: 'sticky', bottom: 0, background: 'var(--white)', paddingTop: 12, borderTop: '1px solid var(--border-light)' }}>
-          <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
-          <button type="submit" className="btn btn-primary">{initial ? 'Save Changes' : 'Add Debt'}</button>
-        </div>
       </form>
     </Modal>
   )
@@ -63,8 +59,8 @@ function PaymentModal({ debt, onSave, onClose }) {
     onSave(Number(form.amount), form.date)
   }
   return (
-    <Modal title={`Log Payment — ${debt.name}`} onClose={onClose}>
-      <form onSubmit={handleSubmit} className="form-grid">
+    <Modal title={`Log Payment — ${debt.name}`} onClose={onClose} formId="payment-form" saveLabel="Log">
+      <form id="payment-form" onSubmit={handleSubmit} className="form-grid">
         <div style={{ background: 'var(--cream-dark)', borderRadius: 'var(--radius-sm)', padding: '12px 14px' }}>
           <p style={{ fontSize: '0.75rem', color: 'var(--text-light)' }}>Current Balance</p>
           <p className="amount amount-expense" style={{ fontSize: '1.4rem' }}>{formatCurrency(debt.currentBalance)}</p>
@@ -82,10 +78,6 @@ function PaymentModal({ debt, onSave, onClose }) {
         <p style={{ fontSize: '0.75rem', color: 'var(--text-light)' }}>
           This will create a "Debt Payments" expense transaction and reduce the balance.
         </p>
-        <div className="form-actions" style={{ position: 'sticky', bottom: 0, background: 'var(--white)', paddingTop: 12, borderTop: '1px solid var(--border-light)' }}>
-          <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
-          <button type="submit" className="btn btn-primary"><DollarSign size={14} /> Log Payment</button>
-        </div>
       </form>
     </Modal>
   )

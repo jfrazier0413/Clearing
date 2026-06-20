@@ -17,8 +17,8 @@ function FixedModal({ initial, onSave, onClose, categories }) {
   })
   function set(k, v) { setForm(f => ({ ...f, [k]: v })) }
   return (
-    <Modal title={initial ? 'Edit Fixed Expense' : 'Add Fixed Expense'} onClose={onClose}>
-      <form onSubmit={e => { e.preventDefault(); onSave(form) }} className="form-grid">
+    <Modal title={initial ? 'Edit Fixed Expense' : 'Add Fixed Expense'} onClose={onClose} formId="fixed-form" saveLabel={initial ? 'Save' : 'Add'}>
+      <form id="fixed-form" onSubmit={e => { e.preventDefault(); onSave(form) }} className="form-grid">
         <div className="form-group">
           <label className="form-label">Name</label>
           <input className="form-input" type="text" placeholder="e.g. Rent" value={form.name} required onChange={e => set('name', e.target.value)} />
@@ -42,10 +42,6 @@ function FixedModal({ initial, onSave, onClose, categories }) {
         <div className="form-group">
           <label className="form-label">Starting Month</label>
           <input className="form-input" type="month" value={form.startMonth} required onChange={e => set('startMonth', e.target.value)} />
-        </div>
-        <div className="form-actions" style={{ position: 'sticky', bottom: 0, background: 'var(--white)', paddingTop: 12, borderTop: '1px solid var(--border-light)' }}>
-          <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
-          <button type="submit" className="btn btn-primary">{initial ? 'Save Changes' : 'Add Fixed Expense'}</button>
         </div>
       </form>
     </Modal>
