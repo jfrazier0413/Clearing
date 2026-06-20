@@ -223,7 +223,7 @@ select.form-input {
   padding-right: 8px;
 }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.form-grid { display: flex; flex-direction: column; gap: 14px; }
+.form-grid { display: flex; flex-direction: column; gap: 14px; padding-bottom: 260px; }
 .form-actions {
   display: flex; gap: 10px; justify-content: flex-end;
   margin-top: 8px;
@@ -246,6 +246,7 @@ select.form-input {
   max-width: 480px;
   max-height: 90dvh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
   animation: slideUp .25s cubic-bezier(.25,.46,.45,.94);
 }
